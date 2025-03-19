@@ -22,7 +22,6 @@
           <a href={% url 'listings' %}>Listings</a>
         </li>
         <li class="breadcrumb-item active">{{listing.title | title}}</li> 
-        
       </ol>
     </nav>
   </div>
@@ -31,7 +30,7 @@
 <!-- Listing -->
 <section id="listing" class="py-4">
   <div class="container">
-    {% include 'partials/_alert.html' %}
+     {% include 'partials/_alert.html' %}
     <a href={% url 'listings' %} class="btn btn-light mb-4">Back To Listings</a>
     <div class="row">
       <div class="col-md-9">
@@ -200,37 +199,44 @@
 <div class="modal fade" id="inquiryModal" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="inquiryModalLabel">Make An Inquiry</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
       <div class="modal-body">
-        <form action="{% url 'contact' %}" method="POST"> {% csrf_token %}
-          <!--check user id-->
-          {% if user.is_authenticated %}
+        <form action="{% url 'contact' %}" method="POST">
+          {% csrf_token %}
+          <!-- check user id-->
+          {% if user.is_authenticated  %}
           <input type="hidden" name="user_id" value="{{user.id}}" />
           {% else %}
           <input type="hidden" name="user_id" value="0" />
           {% endif %}
-          <input type="hidden" name="listing_id" value="{{listing.id}}" />
-          <input type="hidden" name="realtor_email" value="{{listing.realtor.email}}"/>
+           <input type="hidden" name="listing_id" value="{{listing.id}}" />
+            <input type="hidden" name="realtor_email" value="{{listing.realtor.email}}" />
           <div class="form-group">
             <label for="property_name" class="col-form-label">Property:</label>
-          <input
-            type="text"
-            name="listing"
-            class="form-control"
-            value="{{listing.title}}"
-            readonly
-          />
-        </div>
-        <div class="form-group"> 
-          <label for="name" class="col-form-label">Name:</label>
-            {% if user is authenicated %}
-            <input type="text" name="name" value="{{user.first_name}} {{user.last_name}}" class="form-control" readonly />
+            <input
+              type="text"
+              name="listing"
+              class="form-control"
+              value="{{listing.title}}"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="name" class="col-form-label">Name:</label>
+            {% if user.is_authenticated %}
+             <input type="text" name="name" value="{{user.first_name}} {{user.last_name}}" class="form-control" readonly /> 
             {% else %}
-            <input type='text' name='name' class='form-control' required />
+            <input type="text" name="name" class="form-control" required />
             {% endif %}
           </div>
           <div class="form-group">
             <label for="email" class="col-form-label">Email:</label>
-            {% if  user is authenicated %}
+            {% if user.is_authenticated %} 
             <input type="email" name="email" class="form-control" value={{user.email}} required />
             {% else %}
               <input type="email" name="email" class="form-control" required />
